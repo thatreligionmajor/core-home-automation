@@ -12,6 +12,7 @@ import sys
 from urllib.parse import urlparse
 
 from packaging.requirements import InvalidRequirement, Requirement
+from security import safe_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -109,8 +110,7 @@ def install_package(
         args += ["--user"]
         env["PYTHONUSERBASE"] = os.path.abspath(target)
     _LOGGER.debug("Running pip command: args=%s", args)
-    with Popen(
-        args,
+    with safe_command.run(Popen, args,
         stdin=PIPE,
         stdout=PIPE,
         stderr=PIPE,

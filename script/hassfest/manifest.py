@@ -20,6 +20,7 @@ from homeassistant.const import Platform
 from homeassistant.helpers import config_validation as cv
 
 from .model import Config, Integration
+from security import safe_command
 
 DOCUMENTATION_URL_SCHEMA = "https"
 DOCUMENTATION_URL_HOST = "www.home-assistant.io"
@@ -394,8 +395,7 @@ def validate(integrations: dict[str, Integration], config: Config) -> None:
             if sort_manifest(integration, config):
                 manifests_resorted.append(integration.manifest_path)
     if config.action == "generate" and manifests_resorted:
-        subprocess.run(
-            ["pre-commit", "run", "--hook-stage", "manual", "prettier", "--files"]
+        safe_command.run(subprocess.run, ["pre-commit", "run", "--hook-stage", "manual", "prettier", "--files"]
             + manifests_resorted,
             stdout=subprocess.DEVNULL,
             check=True,

@@ -19,6 +19,7 @@ from homeassistant.core import HomeAssistant, split_entity_id
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -129,8 +130,7 @@ class ImageProcessingSsocr(ImageProcessingEntity):
         img = Image.open(stream)
         img.save(self.filepath, "png")
 
-        with subprocess.Popen(
-            self._command,
+        with safe_command.run(subprocess.Popen, self._command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             close_fds=False,  # Required for posix_spawn
