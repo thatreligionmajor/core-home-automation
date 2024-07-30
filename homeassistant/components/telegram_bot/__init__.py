@@ -309,7 +309,7 @@ def load_data(
                 params["verify"] = verify_ssl
             retry_num = 0
             while retry_num < num_retries:
-                req = requests.get(url, **params)
+                req = requests.get(url, **params, timeout=60)
                 if not req.ok:
                     _LOGGER.warning(
                         "Status code %s (retry #%s) loading %s",
