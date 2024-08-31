@@ -6,7 +6,6 @@ from collections import deque
 from collections.abc import Mapping
 from ipaddress import ip_address
 import logging
-from random import randrange
 from typing import Any
 
 from pyatv import exceptions, pair, scan
@@ -28,6 +27,7 @@ from homeassistant.helpers.schema_config_entry_flow import (
 )
 
 from .const import CONF_CREDENTIALS, CONF_IDENTIFIERS, CONF_START_OFF, DOMAIN
+import secrets
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -491,7 +491,7 @@ class AppleTVConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             await self.pairing.close()
             return self.async_abort(reason="device_did_not_pair")
 
-        pin = randrange(1000, stop=10000)
+        pin = secrets.SystemRandom().randrange(1000, stop=10000)
         self.pairing.pin(pin)
         return self.async_show_form(
             step_id="pair_no_pin",

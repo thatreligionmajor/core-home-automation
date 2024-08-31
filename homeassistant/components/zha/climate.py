@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 import functools
-from random import randint
 from typing import Any
 
 from zigpy.zcl.clusters.hvac import Fan as F, Thermostat as T
@@ -54,6 +53,7 @@ from .core.const import (
 from .core.helpers import get_zha_data
 from .core.registries import ZHA_ENTITIES
 from .entity import ZhaEntity
+import secrets
 
 ATTR_SYS_MODE = "system_mode"
 ATTR_RUNNING_MODE = "running_mode"
@@ -490,7 +490,7 @@ class SinopeTechnologiesThermostat(Thermostat):
     """Sinope Technologies Thermostat."""
 
     manufacturer = 0x119C
-    update_time_interval = timedelta(minutes=randint(45, 75))
+    update_time_interval = timedelta(minutes=secrets.SystemRandom().randint(45, 75))
 
     def __init__(self, unique_id, zha_device, cluster_handlers, **kwargs):
         """Initialize ZHA Thermostat instance."""

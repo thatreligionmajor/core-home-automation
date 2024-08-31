@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-from random import randrange
 from typing import Any, NamedTuple
 
 from pyintesishome import IHAuthenticationError, IHConnectionError, IntesisHome
@@ -36,6 +35,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+import secrets
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -377,7 +377,7 @@ class IntesisAC(ClimateEntity):
         if not self._controller.is_connected and self._connected:
             # Connection has dropped
             self._connected = False
-            reconnect_minutes = 1 + randrange(10)
+            reconnect_minutes = 1 + secrets.SystemRandom().randrange(10)
             _LOGGER.error(
                 "Connection to %s API was lost. Reconnecting in %i minutes",
                 self._device_type,

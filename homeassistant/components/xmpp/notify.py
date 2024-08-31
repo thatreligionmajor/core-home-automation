@@ -6,7 +6,6 @@ from http import HTTPStatus
 import logging
 import mimetypes
 import pathlib
-import random
 import string
 
 import requests
@@ -37,6 +36,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 import homeassistant.helpers.template as template_helper
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+import secrets
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -361,7 +361,7 @@ async def async_send_message(  # noqa: C901
                 else:
                     extension = ".txt"
             return (
-                "".join(random.choice(string.ascii_letters) for i in range(10))
+                "".join(secrets.choice(string.ascii_letters) for i in range(10))
                 + extension
             )
 

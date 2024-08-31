@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from random import randint
 
 from enturclient import EnturPublicTransportData
 import voluptuous as vol
@@ -22,6 +21,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
 import homeassistant.util.dt as dt_util
+import secrets
 
 API_CLIENT_NAME = "homeassistant-{}"
 
@@ -106,7 +106,7 @@ async def async_setup_platform(
     quays = [s for s in stop_ids if "Quay" in s]
 
     data = EnturPublicTransportData(
-        API_CLIENT_NAME.format(str(randint(100000, 999999))),
+        API_CLIENT_NAME.format(str(secrets.SystemRandom().randint(100000, 999999))),
         stops=stops,
         quays=quays,
         line_whitelist=line_whitelist,
