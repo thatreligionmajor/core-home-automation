@@ -88,8 +88,7 @@ class HassFlickAuth(AbstractFlickAuth):
 
         # Flick will send the same token, but expiry is relative - so grab it from the token
         token_decoded = jwt.decode(
-            token[CONF_ID_TOKEN], options={"verify_signature": False}
-        )
+            token[CONF_ID_TOKEN], options={"verify_signature": True})
 
         self._hass.config_entries.async_update_entry(
             self._entry,
