@@ -4,8 +4,6 @@ from __future__ import annotations
 from http import HTTPStatus
 from types import MappingProxyType
 from typing import Any
-
-import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from requests.exceptions import HTTPError, Timeout
 import voluptuous as vol
@@ -25,6 +23,7 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 
 from .const import CONF_MJPEG_URL, CONF_STILL_IMAGE_URL, DOMAIN, LOGGER
+from security import safe_requests
 
 
 @callback
@@ -76,7 +75,7 @@ def validate_url(
         else:
             auth = HTTPBasicAuth(username, password)
 
-    response = requests.get(
+    response = safe_requests.get(
         url,
         auth=auth,
         stream=True,

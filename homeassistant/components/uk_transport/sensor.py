@@ -5,8 +5,6 @@ from datetime import datetime, timedelta
 from http import HTTPStatus
 import logging
 import re
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
@@ -17,6 +15,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
 import homeassistant.util.dt as dt_util
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -133,7 +132,7 @@ class UkTransportSensor(SensorEntity):
             {"app_id": self._api_app_id, "app_key": self._api_app_key}, **params
         )
 
-        response = requests.get(self._url, params=request_params, timeout=10)
+        response = safe_requests.get(self._url, params=request_params, timeout=10)
         if response.status_code != HTTPStatus.OK:
             _LOGGER.warning("Invalid response from API")
         elif "error" in response.json():

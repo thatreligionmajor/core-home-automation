@@ -2,8 +2,6 @@
 from datetime import timedelta
 from http import HTTPStatus
 import logging
-
-import requests
 import voluptuous as vol
 
 from homeassistant.const import CONF_API_KEY, Platform
@@ -13,6 +11,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.util import Throttle
 from homeassistant.util.unit_system import METRIC_SYSTEM
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -65,7 +64,7 @@ class BloomSky:
     def refresh_devices(self):
         """Use the API to retrieve a list of devices."""
         _LOGGER.debug("Fetching BloomSky update")
-        response = requests.get(
+        response = safe_requests.get(
             f"{self.API_URL}?{self._endpoint_argument}",
             headers={"Authorization": self._api_key},
             timeout=10,

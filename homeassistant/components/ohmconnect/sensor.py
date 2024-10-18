@@ -15,6 +15,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -75,7 +76,7 @@ class OhmconnectSensor(SensorEntity):
         """Get the latest data from OhmConnect."""
         try:
             url = f"https://login.ohmconnect.com/verify-ohm-hour/{self._ohmid}"
-            response = requests.get(url, timeout=10)
+            response = safe_requests.get(url, timeout=10)
             root = ET.fromstring(response.text)
 
             for child in root:

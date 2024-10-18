@@ -22,6 +22,7 @@ from homeassistant.const import ATTR_ICON
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 _RESOURCE = "https://www.pushsafer.com/api"
@@ -154,9 +155,9 @@ class PushsaferNotificationService(BaseNotificationService):
             _LOGGER.debug("Downloading image from %s", url)
             if username is not None and password is not None:
                 auth_ = HTTPBasicAuth(username, password)
-                response = requests.get(url, auth=auth_, timeout=CONF_TIMEOUT)
+                response = safe_requests.get(url, auth=auth_, timeout=CONF_TIMEOUT)
             else:
-                response = requests.get(url, timeout=CONF_TIMEOUT)
+                response = safe_requests.get(url, timeout=CONF_TIMEOUT)
             return self.get_base64(response.content, response.headers["content-type"])
         _LOGGER.warning("No url was found in param")
 

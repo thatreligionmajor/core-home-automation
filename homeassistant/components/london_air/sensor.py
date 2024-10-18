@@ -4,8 +4,6 @@ from __future__ import annotations
 from datetime import timedelta
 from http import HTTPStatus
 import logging
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
@@ -14,6 +12,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -89,7 +88,7 @@ class APIData:
     @Throttle(SCAN_INTERVAL)
     def update(self):
         """Get the latest data from TFL."""
-        response = requests.get(URL, timeout=10)
+        response = safe_requests.get(URL, timeout=10)
         if response.status_code != HTTPStatus.OK:
             _LOGGER.warning("Invalid response from API")
         else:

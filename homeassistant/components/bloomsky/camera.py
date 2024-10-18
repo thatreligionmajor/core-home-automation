@@ -11,6 +11,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from . import DOMAIN
+from security import safe_requests
 
 
 def setup_platform(
@@ -56,7 +57,7 @@ class BloomSkyCamera(Camera):
             self._bloomsky.refresh_devices()
             # If the URL hasn't changed then the image hasn't changed.
             if self._url != self._last_url:
-                response = requests.get(self._url, timeout=10)
+                response = safe_requests.get(self._url, timeout=10)
                 self._last_url = self._url
                 self._last_image = response.content
         except requests.exceptions.RequestException as error:

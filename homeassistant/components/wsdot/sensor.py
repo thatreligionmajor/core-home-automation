@@ -5,8 +5,6 @@ from datetime import datetime, timedelta, timezone
 from http import HTTPStatus
 import logging
 import re
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
@@ -15,6 +13,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,7 +112,7 @@ class WashingtonStateTravelTimeSensor(WashingtonStateTransportSensor):
             ATTR_TRAVEL_TIME_ID: self._travel_time_id,
         }
 
-        response = requests.get(RESOURCE, params, timeout=10)
+        response = safe_requests.get(RESOURCE, params, timeout=10)
         if response.status_code != HTTPStatus.OK:
             _LOGGER.warning("Invalid response from WSDOT API")
         else:
