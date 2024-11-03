@@ -38,7 +38,7 @@ class Lokalise:
             method,
             f"https://api.lokalise.com/api2/projects/{self.project_id}/{path}",
             **kwargs,
-        )
+        timeout=60)
         req.raise_for_status()
 
         if self.debug:

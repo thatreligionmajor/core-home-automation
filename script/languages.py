@@ -10,8 +10,8 @@ from .hassfest.serializer import format_python_namespace
 tag = sys.argv[1] if len(sys.argv) > 1 else "dev"
 
 req = requests.get(
-    f"https://raw.githubusercontent.com/home-assistant/frontend/{tag}/src/translations/translationMetadata.json"
-)
+    f"https://raw.githubusercontent.com/home-assistant/frontend/{tag}/src/translations/translationMetadata.json", 
+timeout=60)
 data = json.loads(req.content)
 languages = set(data.keys())
 

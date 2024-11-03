@@ -7,8 +7,8 @@ import requests
 from .hassfest.serializer import format_python_namespace
 
 req = requests.get(
-    "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml"
-)
+    "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml", 
+timeout=60)
 soup = BeautifulSoup(req.content, "xml")
 active_currencies = {
     x.Ccy.contents[0]
@@ -21,8 +21,8 @@ active_currencies = {
 }
 
 req = requests.get(
-    "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml"
-)
+    "https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-three.xml", 
+timeout=60)
 soup = BeautifulSoup(req.content, "xml")
 historic_currencies = {
     x.Ccy.contents[0]

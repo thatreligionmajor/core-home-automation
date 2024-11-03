@@ -9,7 +9,7 @@ from .hassfest.serializer import format_python_namespace
 URL = "https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support"
 XPATH_QUERY = "//section[@data-tab='tts']/table[1]/tbody/tr/td[1]/code/text()"
 
-req = requests.get(URL)
+req = requests.get(URL, timeout=60)
 req.raise_for_status()
 tree = html.fromstring(req.content)
 supported_languages_raw = tree.xpath(XPATH_QUERY)
