@@ -17,6 +17,7 @@ import homeassistant.util.package as pkg_util
 from script.gen_requirements_all import COMMENT_REQUIREMENTS, normalize_package_name
 
 from .model import Config, Integration
+from security import safe_command
 
 IGNORE_PACKAGES = {
     commented.lower().replace("_", "-") for commented in COMMENT_REQUIREMENTS
@@ -260,7 +261,7 @@ def install_requirements(integration: Integration, requirements: set[str]) -> bo
             args.append(install_args)
         args.append(requirement_arg)
         try:
-            result = subprocess.run(args, check=True, capture_output=True, text=True)
+            result = safe_command.run(subprocess.run, args, check=True, capture_output=True, text=True)
         except subprocess.SubprocessError:
             integration.add_error(
                 "requirements",

@@ -8,6 +8,7 @@ import tempfile
 import voluptuous as vol
 
 from homeassistant.components.tts import CONF_LANG, PLATFORM_SCHEMA, Provider
+from security import safe_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,7 +53,7 @@ class PicoProvider(Provider):
             fname = tmpf.name
 
         cmd = ["pico2wave", "--wave", fname, "-l", language, "--", message]
-        subprocess.call(cmd)
+        safe_command.run(subprocess.call, cmd)
         data = None
         try:
             with open(fname, "rb") as voice:

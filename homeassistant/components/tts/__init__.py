@@ -68,6 +68,7 @@ from .helper import get_engine_instance
 from .legacy import PLATFORM_SCHEMA, PLATFORM_SCHEMA_BASE, Provider, async_setup_legacy
 from .media_source import generate_media_source_id, media_source_id_to_kwargs
 from .models import Voice
+from security import safe_command
 
 __all__ = [
     "async_default_engine",
@@ -271,8 +272,7 @@ def _convert_audio(
 
         command.append(output_file.name)
 
-        with subprocess.Popen(
-            command, stdin=subprocess.PIPE, stderr=subprocess.PIPE
+        with safe_command.run(subprocess.Popen, command, stdin=subprocess.PIPE, stderr=subprocess.PIPE
         ) as proc:
             _stdout, stderr = proc.communicate(input=audio_bytes)
             if proc.returncode != 0:

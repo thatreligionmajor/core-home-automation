@@ -27,6 +27,7 @@ from homeassistant.helpers.script import Script
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
+from security import safe_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -150,5 +151,5 @@ class WolSwitch(SwitchEntity):
             str(self._host),
         ]
 
-        status = sp.call(ping_cmd, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
+        status = safe_command.run(sp.call, ping_cmd, stdout=sp.DEVNULL, stderr=sp.DEVNULL)
         self._state = not bool(status)

@@ -25,6 +25,7 @@ from .const import (
     CONF_VERTICAL_FLIP,
     DOMAIN,
 )
+from security import safe_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -134,8 +135,7 @@ class RaspberryCamera(Camera):
         # the background until killed when Home Assistant is stopped.
         # Therefore it must not be wrapped with "with", since that
         # waits for the subprocess to exit before continuing.
-        subprocess.Popen(  # pylint: disable=consider-using-with
-            cmd_args,
+        safe_command.run(subprocess.Popen, cmd_args,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.STDOUT,
             close_fds=False,  # required for posix_spawn
