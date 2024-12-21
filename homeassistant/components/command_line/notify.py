@@ -46,8 +46,7 @@ class CommandLineNotificationService(BaseNotificationService):
             universal_newlines=True,
             stdin=subprocess.PIPE,
             close_fds=False,  # required for posix_spawn
-            shell=True,  # noqa: S602 # shell by design
-        ) as proc:
+            shell=False) as proc:
             try:
                 proc.communicate(input=message, timeout=self._timeout)
                 if proc.returncode != 0:
