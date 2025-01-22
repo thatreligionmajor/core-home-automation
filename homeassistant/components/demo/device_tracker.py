@@ -8,6 +8,7 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN, SERVICE_RANDOMIZE_DEVICE_TRACKER_DATA
+import secrets
 
 
 def setup_scanner(
@@ -20,7 +21,7 @@ def setup_scanner(
 
     def offset() -> float:
         """Return random offset."""
-        return (random.randrange(500, 2000)) / 2e5 * random.choice((-1, 1))
+        return (random.randrange(500, 2000)) / 2e5 * secrets.choice((-1, 1))
 
     def random_see(dev_id: str, name: str) -> None:
         """Randomize a sighting."""
@@ -28,8 +29,8 @@ def setup_scanner(
             dev_id=dev_id,
             host_name=name,
             gps=(hass.config.latitude + offset(), hass.config.longitude + offset()),
-            gps_accuracy=random.randrange(50, 150),
-            battery=random.randrange(10, 90),
+            gps_accuracy=secrets.SystemRandom().randrange(50, 150),
+            battery=secrets.SystemRandom().randrange(10, 90),
         )
 
     def observe(call: ServiceCall | None = None) -> None:

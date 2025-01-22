@@ -7,7 +7,6 @@ from datetime import timedelta
 import functools
 import itertools
 import logging
-import random
 from typing import TYPE_CHECKING, Any
 
 from zigpy.zcl.clusters.general import Identify, LevelControl, OnOff
@@ -56,6 +55,7 @@ from .core.const import (
 from .core.helpers import LogMixin, async_get_zha_config_value, get_zha_data
 from .core.registries import ZHA_ENTITIES
 from .entity import ZhaEntity, ZhaGroupEntity
+import secrets
 
 if TYPE_CHECKING:
     from .core.device import ZHADevice
@@ -784,7 +784,7 @@ class Light(BaseLight, ZhaEntity):
             self.async_accept_signal(
                 self._level_cluster_handler, SIGNAL_SET_LEVEL, self.set_level
             )
-        refresh_interval = random.randint(*(x * 60 for x in self._REFRESH_INTERVAL))
+        refresh_interval = secrets.SystemRandom().randint(*(x * 60 for x in self._REFRESH_INTERVAL))
         self._cancel_refresh_handle = async_track_time_interval(
             self.hass, self._refresh, timedelta(seconds=refresh_interval)
         )

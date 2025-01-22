@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from random import randint
 
 from bsblan import BSBLAN, BSBLANConnectionError
 from bsblan.models import State
@@ -13,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import DOMAIN, LOGGER, SCAN_INTERVAL
+import secrets
 
 
 class BSBLanUpdateCoordinator(DataUpdateCoordinator[State]):
@@ -37,7 +37,7 @@ class BSBLanUpdateCoordinator(DataUpdateCoordinator[State]):
             # use the default scan interval and add a random number of seconds to avoid timeouts when
             # the BSB-Lan device is already/still busy retrieving data,
             # e.g. for MQTT or internal logging.
-            update_interval=SCAN_INTERVAL + timedelta(seconds=randint(1, 8)),
+            update_interval=SCAN_INTERVAL + timedelta(seconds=secrets.SystemRandom().randint(1, 8)),
         )
 
     async def _async_update_data(self) -> State:
@@ -45,7 +45,7 @@ class BSBLanUpdateCoordinator(DataUpdateCoordinator[State]):
 
         # use the default scan interval and add a random number of seconds to avoid timeouts when
         # the BSB-Lan device is already/still busy retrieving data, e.g. for MQTT or internal logging.
-        self.update_interval = SCAN_INTERVAL + timedelta(seconds=randint(1, 8))
+        self.update_interval = SCAN_INTERVAL + timedelta(seconds=secrets.SystemRandom().randint(1, 8))
 
         try:
             return await self.client.state()

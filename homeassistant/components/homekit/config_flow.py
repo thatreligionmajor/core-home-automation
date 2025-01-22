@@ -4,7 +4,6 @@ from __future__ import annotations
 from collections.abc import Iterable
 from copy import deepcopy
 from operator import itemgetter
-import random
 import re
 import string
 from typing import Any
@@ -59,6 +58,7 @@ from .const import (
     VIDEO_CODEC_COPY,
 )
 from .util import async_find_next_available_port, state_needs_accessory_mode
+import secrets
 
 CONF_CAMERA_AUDIO = "camera_audio"
 CONF_CAMERA_COPY = "camera_copy"
@@ -312,7 +312,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         acceptable_mdns_chars = string.ascii_uppercase + string.digits
         suggested_name: str | None = None
         while not suggested_name or suggested_name in current_names:
-            trailer = "".join(random.choices(acceptable_mdns_chars, k=2))
+            trailer = "".join(secrets.SystemRandom().choices(acceptable_mdns_chars, k=2))
             suggested_name = f"{valid_mdns_name} {trailer}"
 
         return suggested_name

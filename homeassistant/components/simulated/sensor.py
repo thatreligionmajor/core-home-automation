@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from datetime import datetime
 import math
-from random import Random
 
 import voluptuous as vol
 
@@ -14,6 +13,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 import homeassistant.util.dt as dt_util
+import secrets
 
 CONF_AMP = "amplitude"
 CONF_FWHM = "spread"
@@ -91,7 +91,7 @@ class SimulatedSensor(SensorEntity):
         self._phase = phase  # phase in degrees
         self._fwhm = fwhm
         self._seed = seed
-        self._random = Random(seed)  # A local seeded Random
+        self._random = secrets.SystemRandom().Random(seed)  # A local seeded Random
         self._start_time = (
             datetime(1970, 1, 1, tzinfo=dt_util.UTC)
             if relative_to_epoch

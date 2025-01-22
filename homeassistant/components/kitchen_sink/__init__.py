@@ -6,7 +6,6 @@ incorrect behavior, and are thus not wanted in the demo integration.
 from __future__ import annotations
 
 import datetime
-from random import random
 
 from homeassistant.components.recorder import DOMAIN as RECORDER_DOMAIN, get_instance
 from homeassistant.components.recorder.models import StatisticData, StatisticMetaData
@@ -22,6 +21,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
 from homeassistant.helpers.typing import ConfigType
 import homeassistant.util.dt as dt_util
+import secrets
 
 DOMAIN = "kitchen_sink"
 
@@ -128,13 +128,13 @@ def _generate_mean_statistics(
     mean = init_value
     now = start
     while now < end:
-        mean = mean + random() * max_diff - max_diff / 2
+        mean = mean + secrets.SystemRandom().random() * max_diff - max_diff / 2
         statistics.append(
             {
                 "start": now,
                 "mean": mean,
-                "min": mean - random() * max_diff,
-                "max": mean + random() * max_diff,
+                "min": mean - secrets.SystemRandom().random() * max_diff,
+                "max": mean + secrets.SystemRandom().random() * max_diff,
             }
         )
         now = now + datetime.timedelta(hours=1)
@@ -160,7 +160,7 @@ async def _insert_sum_statistics(
     if statistic_id in last_stats:
         sum_ = last_stats[statistic_id][0]["sum"] or 0
     while now < end:
-        sum_ = sum_ + random() * max_diff
+        sum_ = sum_ + secrets.SystemRandom().random() * max_diff
         statistics.append(
             {
                 "start": now,

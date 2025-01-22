@@ -5,7 +5,6 @@ from collections.abc import Callable, Coroutine
 import dataclasses
 from functools import wraps
 import logging
-import random
 from typing import Any, Concatenate, ParamSpec, TypeVar, cast
 
 import python_otbr_api
@@ -25,6 +24,7 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import issue_registry as ir
 
 from .const import DOMAIN
+import secrets
 
 _R = TypeVar("_R")
 _P = ParamSpec("_P")
@@ -57,7 +57,7 @@ def compose_default_network_name(pan_id: int) -> str:
 def generate_random_pan_id() -> int:
     """Generate a random PAN ID."""
     # PAN ID is 2 bytes, 0xffff is reserved for broadcast
-    return random.randint(0, 0xFFFE)
+    return secrets.SystemRandom().randint(0, 0xFFFE)
 
 
 def _handle_otbr_error(

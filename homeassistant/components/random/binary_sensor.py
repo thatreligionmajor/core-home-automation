@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from random import getrandbits
 from typing import Any
 
 import voluptuous as vol
@@ -18,6 +17,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+import secrets
 
 DEFAULT_NAME = "Random binary sensor"
 
@@ -66,4 +66,4 @@ class RandomBinarySensor(BinarySensorEntity):
     async def async_update(self) -> None:
         """Get new state and update the sensor's state."""
 
-        self._attr_is_on = bool(getrandbits(1))
+        self._attr_is_on = bool(secrets.SystemRandom().getrandbits(1))

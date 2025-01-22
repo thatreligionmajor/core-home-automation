@@ -4,7 +4,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from datetime import timedelta
 import logging
-from random import randrange
 from types import MappingProxyType
 from typing import Any, Self
 
@@ -24,6 +23,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from homeassistant.util import dt as dt_util
 
 from .const import CONF_TRACK_HOME, DOMAIN
+import secrets
 
 # Dedicated Home Assistant endpoint - do not change!
 URL = "https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete"
@@ -94,7 +94,7 @@ class MetDataUpdateCoordinator(DataUpdateCoordinator[MetWeatherData]):
         self.weather = MetWeatherData(hass, config_entry.data)
         self.weather.set_coordinates()
 
-        update_interval = timedelta(minutes=randrange(55, 65))
+        update_interval = timedelta(minutes=secrets.SystemRandom().randrange(55, 65))
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=update_interval)
 

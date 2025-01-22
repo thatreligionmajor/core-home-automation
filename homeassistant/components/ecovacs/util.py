@@ -1,7 +1,5 @@
 """Ecovacs util functions."""
 from __future__ import annotations
-
-import random
 import string
 from typing import TYPE_CHECKING
 
@@ -10,6 +8,7 @@ from .entity import (
     EcovacsDescriptionEntity,
     EcovacsEntity,
 )
+import secrets
 
 if TYPE_CHECKING:
     from .controller import EcovacsController
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
 def get_client_device_id() -> str:
     """Get client device id."""
     return "".join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in range(8)
+        secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8)
     )
 
 
