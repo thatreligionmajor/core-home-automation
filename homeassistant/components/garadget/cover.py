@@ -27,6 +27,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import track_utc_time_change
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -260,7 +261,7 @@ class GaradgetCover(CoverEntity):
     def _get_variable(self, var):
         """Get latest status."""
         url = f"{self.particle_url}/v1/devices/{self.device_id}/{var}?access_token={self.access_token}"
-        ret = requests.get(url, timeout=10)
+        ret = safe_requests.get(url, timeout=10)
         result = {}
         for pairs in ret.json()["result"].split("|"):
             key = pairs.split("=")

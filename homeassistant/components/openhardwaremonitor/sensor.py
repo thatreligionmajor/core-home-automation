@@ -16,6 +16,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
 from homeassistant.util.dt import utcnow
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -150,7 +151,7 @@ class OpenHardwareMonitorData:
         )
 
         try:
-            response = requests.get(data_url, timeout=30)
+            response = safe_requests.get(data_url, timeout=30)
             self.data = response.json()
         except requests.exceptions.ConnectionError:
             _LOGGER.debug("ConnectionError: Is OpenHardwareMonitor running?")

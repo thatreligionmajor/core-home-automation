@@ -28,6 +28,7 @@ from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -128,7 +129,7 @@ class Ted5000Gateway:
         """Get the latest data from the Ted5000 XML API."""
 
         try:
-            request = requests.get(self.url, timeout=10)
+            request = safe_requests.get(self.url, timeout=10)
         except requests.exceptions.RequestException as err:
             _LOGGER.error("No connection to endpoint: %s", err)
         else:

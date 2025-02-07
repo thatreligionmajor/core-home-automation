@@ -37,6 +37,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 import homeassistant.helpers.template as template_helper
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -267,7 +268,7 @@ async def async_send_message(  # noqa: C901
 
             def get_url(url):
                 """Return result for GET request to url."""
-                return requests.get(
+                return safe_requests.get(
                     url, verify=data.get(ATTR_VERIFY, True), timeout=timeout
                 )
 

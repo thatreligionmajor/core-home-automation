@@ -23,6 +23,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -143,7 +144,7 @@ class DdWrtDeviceScanner(DeviceScanner):
     def get_ddwrt_data(self, url):
         """Retrieve data from DD-WRT and return parsed result."""
         try:
-            response = requests.get(
+            response = safe_requests.get(
                 url,
                 auth=(self.username, self.password),
                 timeout=4,

@@ -3,8 +3,6 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
@@ -13,6 +11,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 _RESOURCE = "http://apilayer.net/api/live"
@@ -46,7 +45,7 @@ def setup_platform(
 
     rest = CurrencylayerData(_RESOURCE, parameters)
 
-    response = requests.get(_RESOURCE, params=parameters, timeout=10)
+    response = safe_requests.get(_RESOURCE, params=parameters, timeout=10)
     sensors = []
     for variable in config[CONF_QUOTE]:
         sensors.append(CurrencylayerSensor(rest, base, variable))
@@ -102,7 +101,7 @@ class CurrencylayerData:
     def update(self):
         """Get the latest data from Currencylayer."""
         try:
-            result = requests.get(self._resource, params=self._parameters, timeout=10)
+            result = safe_requests.get(self._resource, params=self._parameters, timeout=10)
             if "error" in result.json():
                 raise ValueError(result.json()["error"]["info"])
             self.data = result.json()["quotes"]

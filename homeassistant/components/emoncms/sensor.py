@@ -30,6 +30,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -278,7 +279,7 @@ class EmonCmsData:
         """Get the latest data from Emoncms."""
         try:
             parameters = {"apikey": self._apikey}
-            req = requests.get(
+            req = safe_requests.get(
                 self._url, params=parameters, allow_redirects=True, timeout=5
             )
         except requests.exceptions.RequestException as exception:

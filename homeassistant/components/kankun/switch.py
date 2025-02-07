@@ -21,6 +21,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -88,7 +89,7 @@ class KankunSwitch(SwitchEntity):
         _LOGGER.info("Switching to state: %s", newstate)
 
         try:
-            req = requests.get(
+            req = safe_requests.get(
                 f"{self._url}?set={newstate}", auth=self._auth, timeout=5
             )
             return req.json()["ok"]
@@ -100,7 +101,7 @@ class KankunSwitch(SwitchEntity):
         _LOGGER.info("Querying state from: %s", self._url)
 
         try:
-            req = requests.get(f"{self._url}?get=state", auth=self._auth, timeout=5)
+            req = safe_requests.get(f"{self._url}?get=state", auth=self._auth, timeout=5)
             return req.json()["state"] == "on"
         except requests.RequestException:
             _LOGGER.error("State query failed")

@@ -19,6 +19,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,7 +47,7 @@ def setup_platform(
     device_class = config.get(CONF_DEVICE_CLASS)
 
     try:
-        response = requests.get(resource, timeout=10).json()
+        response = safe_requests.get(resource, timeout=10).json()
     except requests.exceptions.MissingSchema:
         _LOGGER.error(
             "Missing resource or schema in configuration. Add http:// to your URL"
@@ -82,7 +83,7 @@ class ArestBinarySensor(BinarySensorEntity):
         self._attr_device_class = device_class
 
         if pin is not None:
-            request = requests.get(f"{resource}/mode/{pin}/i", timeout=10)
+            request = safe_requests.get(f"{resource}/mode/{pin}/i", timeout=10)
             if request.status_code != HTTPStatus.OK:
                 _LOGGER.error("Can't set mode of %s", resource)
 
@@ -105,7 +106,7 @@ class ArestData:
     def update(self) -> None:
         """Get the latest data from aREST device."""
         try:
-            response = requests.get(f"{self._resource}/digital/{self._pin}", timeout=10)
+            response = safe_requests.get(f"{self._resource}/digital/{self._pin}", timeout=10)
             self.data = {"state": response.json()["return_value"]}
         except requests.exceptions.ConnectionError:
             _LOGGER.error("No route to device '%s'", self._resource)

@@ -17,6 +17,7 @@ from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_TYPE, CONF_USERNA
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -110,7 +111,7 @@ class HitronCODADeviceScanner(DeviceScanner):
 
         # doing a request
         try:
-            res = requests.get(self._url, timeout=10, cookies={"userid": self._userid})
+            res = safe_requests.get(self._url, timeout=10, cookies={"userid": self._userid})
         except requests.exceptions.Timeout:
             _LOGGER.error("Connection to the router timed out at URL %s", self._url)
             return False

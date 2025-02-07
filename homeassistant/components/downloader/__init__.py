@@ -14,6 +14,7 @@ from homeassistant.core import HomeAssistant, ServiceCall
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.util import raise_if_invalid_filename, raise_if_invalid_path
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -80,7 +81,7 @@ def setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
                 final_path = None
 
-                req = requests.get(url, stream=True, timeout=10)
+                req = safe_requests.get(url, stream=True, timeout=10)
 
                 if req.status_code != HTTPStatus.OK:
                     _LOGGER.warning(

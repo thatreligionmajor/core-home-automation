@@ -14,6 +14,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 _RESOURCE = "http://www.zillow.com/webservice/GetZestimate.htm"
@@ -107,7 +108,7 @@ class ZestimateDataSensor(SensorEntity):
         """Get the latest data and update the states."""
 
         try:
-            response = requests.get(_RESOURCE, params=self.params, timeout=5)
+            response = safe_requests.get(_RESOURCE, params=self.params, timeout=5)
             data = response.content.decode("utf-8")
             data_dict = xmltodict.parse(data).get(ZESTIMATE)
             error_code = int(data_dict["message"]["code"])

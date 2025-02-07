@@ -4,8 +4,6 @@ from __future__ import annotations
 from datetime import timedelta
 import logging
 import time
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
@@ -14,6 +12,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -119,7 +118,7 @@ class WorldTidesInfoSensor(SensorEntity):
         )
 
         try:
-            self.data = requests.get(resource, timeout=10).json()
+            self.data = safe_requests.get(resource, timeout=10).json()
             _LOGGER.debug("Data: %s", self.data)
             _LOGGER.debug("Tide data queried with start time set to: %s", start)
         except ValueError as err:

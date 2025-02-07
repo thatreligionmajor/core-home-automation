@@ -4,8 +4,6 @@ from __future__ import annotations
 from http import HTTPStatus
 import logging
 from typing import Any
-
-import requests
 import voluptuous as vol
 
 from homeassistant.components.notify import PLATFORM_SCHEMA, BaseNotificationService
@@ -13,6 +11,7 @@ from homeassistant.const import CONF_API_KEY, CONF_RECIPIENT
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,6 +45,6 @@ class ClickatellNotificationService(BaseNotificationService):
         """Send a message to a user."""
         data = {"apiKey": self.api_key, "to": self.recipient, "content": message}
 
-        resp = requests.get(BASE_API_URL, params=data, timeout=5)
+        resp = safe_requests.get(BASE_API_URL, params=data, timeout=5)
         if resp.status_code not in (HTTPStatus.OK, HTTPStatus.ACCEPTED):
             _LOGGER.error("Error %s : %s", resp.status_code, resp.text)
