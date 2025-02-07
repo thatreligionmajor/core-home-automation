@@ -5,7 +5,6 @@ import logging
 from typing import Any
 
 from pysignalclirestapi import SignalCliRestApi, SignalCliRestApiError
-import requests
 import voluptuous as vol
 
 from homeassistant.components.notify import (
@@ -16,6 +15,7 @@ from homeassistant.components.notify import (
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -140,7 +140,7 @@ class SignalNotificationService(BaseNotificationService):
                     _LOGGER.error("URL '%s' not in allow list", url)
                     continue
 
-                resp = requests.get(
+                resp = safe_requests.get(
                     url, verify=data[ATTR_VERIFY_SSL], timeout=10, stream=True
                 )
                 resp.raise_for_status()

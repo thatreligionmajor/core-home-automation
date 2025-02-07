@@ -18,6 +18,7 @@ from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -73,7 +74,7 @@ class DteEnergyBridgeSensor(SensorEntity):
     def update(self) -> None:
         """Get the energy usage data from the DTE energy bridge."""
         try:
-            response = requests.get(self._url, timeout=5)
+            response = safe_requests.get(self._url, timeout=5)
         except (requests.exceptions.RequestException, ValueError):
             _LOGGER.warning(
                 "Could not update status for DTE Energy Bridge (%s)", self._attr_name

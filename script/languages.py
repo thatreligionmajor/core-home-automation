@@ -3,13 +3,12 @@ import json
 from pathlib import Path
 import sys
 
-import requests
-
 from .hassfest.serializer import format_python_namespace
+from security import safe_requests
 
 tag = sys.argv[1] if len(sys.argv) > 1 else "dev"
 
-req = requests.get(
+req = safe_requests.get(
     f"https://raw.githubusercontent.com/home-assistant/frontend/{tag}/src/translations/translationMetadata.json"
 )
 data = json.loads(req.content)

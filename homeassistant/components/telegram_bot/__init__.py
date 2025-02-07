@@ -7,8 +7,6 @@ import io
 from ipaddress import ip_network
 import logging
 from typing import Any
-
-import requests
 from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from telegram import (
     Bot,
@@ -41,6 +39,7 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.exceptions import TemplateError
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -309,7 +308,7 @@ def load_data(
                 params["verify"] = verify_ssl
             retry_num = 0
             while retry_num < num_retries:
-                req = requests.get(url, **params)
+                req = safe_requests.get(url, **params)
                 if not req.ok:
                     _LOGGER.warning(
                         "Status code %s (retry #%s) loading %s",

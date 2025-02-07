@@ -22,6 +22,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,7 +67,7 @@ def setup_platform(
     pins = config[CONF_PINS]
 
     try:
-        response = requests.get(resource, timeout=10).json()
+        response = safe_requests.get(resource, timeout=10).json()
     except requests.exceptions.MissingSchema:
         _LOGGER.error(
             "Missing resource or schema in configuration. Add http:// to your URL"
@@ -155,7 +156,7 @@ class ArestSensor(SensorEntity):
         self._renderer = renderer
 
         if pin is not None:
-            request = requests.get(f"{resource}/mode/{pin}/i", timeout=10)
+            request = safe_requests.get(f"{resource}/mode/{pin}/i", timeout=10)
             if request.status_code != HTTPStatus.OK:
                 _LOGGER.error("Can't set mode of %s", resource)
 
@@ -187,17 +188,17 @@ class ArestData:
         """Get the latest data from aREST device."""
         try:
             if self._pin is None:
-                response = requests.get(self._resource, timeout=10)
+                response = safe_requests.get(self._resource, timeout=10)
                 self.data = response.json()["variables"]
             else:
                 try:
                     if str(self._pin[0]) == "A":
-                        response = requests.get(
+                        response = safe_requests.get(
                             f"{self._resource}/analog/{self._pin[1:]}", timeout=10
                         )
                         self.data = {"value": response.json()["return_value"]}
                 except TypeError:
-                    response = requests.get(
+                    response = safe_requests.get(
                         f"{self._resource}/digital/{self._pin}", timeout=10
                     )
                     self.data = {"value": response.json()["return_value"]}

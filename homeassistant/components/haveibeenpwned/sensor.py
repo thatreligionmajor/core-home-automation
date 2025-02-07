@@ -17,6 +17,7 @@ from homeassistant.helpers.event import track_point_in_time
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.util import Throttle
 import homeassistant.util.dt as dt_util
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -161,7 +162,7 @@ class HaveIBeenPwnedData:
             url = f"{URL}{self._email}?truncateResponse=false"
             header = {"User-Agent": HA_USER_AGENT, "hibp-api-key": self._api_key}
             _LOGGER.debug("Checking for breaches for email: %s", self._email)
-            req = requests.get(url, headers=header, allow_redirects=True, timeout=5)
+            req = safe_requests.get(url, headers=header, allow_redirects=True, timeout=5)
 
         except requests.exceptions.RequestException:
             _LOGGER.error("Failed fetching data for %s", self._email)

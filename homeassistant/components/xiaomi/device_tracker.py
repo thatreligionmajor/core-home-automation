@@ -16,6 +16,7 @@ from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
+from security import safe_requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,7 +114,7 @@ def _retrieve_list(host, token, **kwargs):
     url = "http://{}/cgi-bin/luci/;stok={}/api/misystem/devicelist"
     url = url.format(host, token)
     try:
-        res = requests.get(url, timeout=10, **kwargs)
+        res = safe_requests.get(url, timeout=10, **kwargs)
     except requests.exceptions.Timeout:
         _LOGGER.exception("Connection to the router timed out at URL %s", url)
         return
