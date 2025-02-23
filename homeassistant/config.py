@@ -537,7 +537,7 @@ def process_ha_config_upgrade(hass: HomeAssistant) -> None:
 
     try:
         with open(version_path, encoding="utf8") as inp:
-            conf_version = inp.readline().strip()
+            conf_version = inp.readline(5_000_000).strip()
     except FileNotFoundError:
         # Last version to not have this file
         conf_version = "0.7.7"
